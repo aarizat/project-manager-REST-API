@@ -1,6 +1,8 @@
 '''
 Run app.
 '''
+from os import getenv
+
 from flask import Flask
 
 from api.v1.extensions import db
@@ -20,7 +22,7 @@ from api.v1.views import api_views
 app.register_blueprint(api_views)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host=getenv('API_HOST'), port=getenv('API_PORT'))
 
 #return app
 
