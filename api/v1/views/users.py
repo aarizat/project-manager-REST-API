@@ -11,7 +11,7 @@ import jwt
 from api.v1.views import api_views
 from api.v1.models import User
 from api.v1.extensions import db
-from api.run import app
+from api.v1.app import app
 
 
 @api_views.route('/users/signup', strict_slashes=False, methods=['POST'])
@@ -58,7 +58,7 @@ def login():
     if check_password_hash(user.password, auth.get('password')):
         token = jwt.encode({
             'public_id': user.public_id,
-            'exp': datetime.utcnow() + timedelta(minutes=1)
+            'exp': datetime.utcnow() + timedelta(minutes=5)
         }, app.config['SECRET_KEY'])
         return make_response(jsonify({'token': token.decode('UTF-8')}), 201)
     return make_response(
