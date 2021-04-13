@@ -23,9 +23,3 @@ app.register_blueprint(api_views)
 
 if __name__ == '__main__':
     app.run(host=getenv('API_HOST'), port=getenv('API_PORT'))
-
-#return app
-
-
-#from api.v1 import models
-
