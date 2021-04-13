@@ -7,14 +7,13 @@ from flask import request, jsonify
 import jwt
 
 from api.v1.models import User
-from api.run import app
+from api.v1.app import app
 
 
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers.get('x-access-token')
-        print('Printing toeken: ', token)
         if token is None:
             return jsonify({'message': 'Token is missing.'}), 401
         try:
