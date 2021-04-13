@@ -2,7 +2,7 @@
 
 This API allows you to organize projects and their tasks. You can create, delete, update, get projects, all of this operations can also performed over theirs tasks. 
 
-This API implements JWT (JSON WEB TOKEN) that's why you must be first registered and after logged in order to get a Token that allows you to do request to API.
+This API implements [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) (JSON WEB TOKEN) that's why you must be first registered and after logged in order to get a Token that allows you to do request to API.
 
 
 ## Installation
@@ -56,5 +56,44 @@ $ API_HOST=0.0.0.0 API_PORT=5000 DB_USER=user_db DB_PWD=pwd_db DB_HOST=localhost
 
 Now, the API is running in the 5000 port ready to receive requests. For this is good a idea to use a client like `Postman`.
 
+#### Look at this example:
 
+Open postman client and type `http://127.0.0.1:5000/api/v1/users/signup`. Add the information of the user to register in the body, `username`, `email` and `password`. Choose `POST` method.
 
+See the picture
+
+<a href="https://imgur.com/7yWbcfk"><img src="https://i.imgur.com/7yWbcfk.png" title="source: imgur.com" /></a>
+
+Once the information has been added you can make the post request, if everything was OK the response will be `Successfully registered.` and now you can login with this user to have access to other end point.
+
+To loggin you must change the endpoint above to `http://127.0.0.1:5000/api/v1/users/login.` and send in the body the `username` and `password` of the user prevously registered.
+
+Like so:
+
+<a href="https://imgur.com/ag9gmia"><img src="https://i.imgur.com/ag9gmia.png" title="source: imgur.com" /></a>
+
+If it went well, the response will be a `token`. This token will be needed to make any another request.
+
+> This token has expiration time of 5 minutes, this means that you must login each 5 minutes to get other token and be able to interact with the API
+
+<a href="https://imgur.com/uaSpeMW"><img src="https://i.imgur.com/uaSpeMW.png" title="source: imgur.com" /></a>
+
+For example, you could make a get request to following endpoint to see all of the projects. For this you must placed in the header the token recieved at moment of loggin: Look at the picture:
+
+<a href="https://imgur.com/mx9L8Wb"><img src="https://i.imgur.com/mx9L8Wb.png" title="source: imgur.com" /></a>
+
+Every time you want to access to any end point you must performe the same proccess.
+
+In order to know more about the endpoints of the API you can read the documentation.
+
+## Support
+
+If you have any problem executing this AP, please do not hesitate to contact me at [Twitter](https://twitter.com/aarizatr)
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## Author
+
+#### Andres Ariza-Triana 
