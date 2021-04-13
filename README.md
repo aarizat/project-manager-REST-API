@@ -56,6 +56,32 @@ $ API_HOST=0.0.0.0 API_PORT=5000 DB_USER=user_db DB_PWD=pwd_db DB_HOST=localhost
 
 Now, the API is running in the 5000 port ready to receive requests. For this is good a idea to use a client like `Postman`.
 
+#### List of endpoints:
+
+Projects:
+```
+* GET    /projects           List projects        
+* POST   /projects           Create a new project
+* PUT    /projects/{id}      Update a prject by ID
+* DELETE /projects/{id}      Delete a project by ID
+* PATCH  /projects/{id}      Update partially a project by ID
+```
+
+Tasks:
+```
+* GET    /projects/{id}/tasks        List of all task from project by ID
+* POST   /projects/{id}/tasks        Append a new task to a project by ID
+* DELETE /projects/{id}/tasks/{id}   Delete a task by ID from a project by ID
+* PUT    /projects/{id}/tasks/{id}   Update the task by ID from project by ID
+* PATCH  /projects/{id}/tasks/{id}   Update partially task by ID from a project by ID
+```
+
+Users:
+```
+* POST user/signup   Register a new user
+* POST user/login    Login a user already registered.
+```
+
 #### Look at this example:
 
 Open postman client and type `http://127.0.0.1:5000/api/v1/users/signup`. Add the information of the user to register in the body, `username`, `email` and `password`. Choose `POST` method.
@@ -84,7 +110,6 @@ For example, you could make a get request to following endpoint to see all of th
 
 Every time you want to access to any end point you must performe the same proccess.
 
-In order to know more about the endpoints of the API you can read the documentation.
 
 ## Support
 
