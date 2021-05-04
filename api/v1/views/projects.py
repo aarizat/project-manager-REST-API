@@ -1,7 +1,7 @@
 '''
 Definition of endpoints to manage resources related to projects.
 '''
-from datetime import datetime
+from datetime import datetime, date
 
 from flask import request, jsonify, Response
 
@@ -11,7 +11,7 @@ from api.v1.models import Project
 from api.v1.views import api_views
 
 
-DATE_FMT = '%Y-%m-%dT%H:%M:%S'
+DATE_FMT = '%Y-%m-%d'
 
 
 @api_views.route('/projects', strict_slashes=False, methods=['GET'])
@@ -31,7 +31,7 @@ def get_project_by_id(id):
     Fecth a project resource by its id.
     '''
     project = Project.query.get_or_404(id)
-    return project.as_dict()
+    return jsonify(project.as_dict())
 
 
 @api_views.route('/projects', strict_slashes=False, methods=['POST'])
@@ -41,17 +41,16 @@ def create_project():
     Create a project resource
     '''
     json = request.get_json()
-    start_date = datetime.strptime(json.get('start_date'), DATE_FMT)
-    if start_date < datetime.now():
+    start_date = datetime.strptime(json.get('start_date'), DATE_FMT).date()
+    if start_date < date.today():
         return {"start_date": 'should match or exceed the current date'}, 422
     if json.get('end_date'):
-        end_date = datetime.strptime(json.get('end_date'), DATE_FMT)
-        if end_date <= datetime.now():
+        end_date = datetime.strptime(json.get('end_date'), DATE_FMT).date()
+        if end_date <= date.today():
             return {"end_date": 'must be greater than the current date'}, 422
     project = Project(**json)
-    db.session.add(project)
-    db.session.commit()
-    return project.as_dict(), 201
+    project.save()
+    return jsonify(project.as_dict()), 201
 
 
 @api_views.route('/projects/<id>', strict_slashes=False, methods=['DELETE'])
@@ -61,9 +60,8 @@ def delete_project_by_id(id):
     Delete a project resource by ID.
     '''
     project = Project.query.get_or_404(id)
-    db.session.delete(project)
-    db.session.commit()
-    return {"Deleted": id}
+    project.delete()
+    return jsonify({"Deleted": id})
 
 
 @api_views.route('/projects/<id>', strict_slashes=False, methods=['PUT'])
@@ -79,7 +77,7 @@ def update_project_by_id(id):
             setattr(project, key, value)
     db.session.commit()
     if json.get('end_date'):
-        end_date = datetime.strptime(json['end_date'], DATE_FMT)
+        end_date = datetime.strptime(json['end_date'], DATE_FMT).date()
         if end_date < project.start_date:
             return {'end_date': 'cannot be less than start_date project'}, 422
         for task in project.tasks:
@@ -87,9 +85,9 @@ def update_project_by_id(id):
                 response = {
                     'task_id': task.id,
                     'execution_date': task.execution_date,
-                    'Msg': 'task with a prior date to end date project'
+                    'msg': 'task with a prior date to end date project'
                 }
-                return resp, 422
+                return jsonify(response), 422
         project.end_date = json['end_date']
         db.session.commit()
     if json.get('status') == 'Finished':
@@ -98,12 +96,12 @@ def update_project_by_id(id):
                 response = {
                     'task_id': task.id,
                     'status': task.status,
-                    'Msg': 'This task must be completed'
+                    'msg': 'This task must be completed'
                 }
-                return response, 422
+                return jsonify(response), 422
         project.status = json['status']
         db.session.commit()
-    return project.as_dict()
+    return jsonify(project.as_dict())
 
 
 @api_views.route('/projects/<id>', strict_slashes=False, methods=['PATCH'])
@@ -119,7 +117,7 @@ def modify_project_by_id(id):
             setattr(project, key, value)
     db.session.commit()
     if json.get('end_date'):
-        end_date = datetime.strptime(json.get('end_date'), DATE_FMT)
+        end_date = datetime.strptime(json.get('end_date'), DATE_FMT).date()
         if end_date < project.start_date:
             return {'end_date': 'cannot be less than start_date project'}, 422
         for task in project.tasks:
@@ -127,9 +125,9 @@ def modify_project_by_id(id):
                 response = {
                     'task_id': task.id,
                     'execution_date': task.execution_date,
-                    'Msg': 'task with a prior date to end date project'
+                    'msg': 'task with a prior date to end date project'
                 }
-                return response, 422
+                return jsonify(response), 422
         project.end_date = json.get('end_date')
         db.session.commit()
     if json.get('status') == 'Finished':
@@ -138,10 +136,9 @@ def modify_project_by_id(id):
                 response = {
                     'task_id': task.id,
                     'status': task.status,
-                    'Msg': 'This task must be completed'
+                    'msg': 'This task must be completed'
                 }
-                return response, 422
+                return jsonify(response), 422
         project.status = json['status']
         db.session.commit()
-    return project.as_dict()
-
+    return jsonify(project.as_dict())

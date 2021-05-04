@@ -11,7 +11,7 @@ from api.v1.models import Project, Task
 from api.v1.views import api_views
 
 
-DATE_FMT = '%Y-%m-%dT%H:%M:%S'
+DATE_FMT = '%Y-%m-%d'
 
 
 @api_views.route('/projects/<project_id>/tasks',
@@ -30,12 +30,12 @@ def add_task2project(project_id):
                 'execution_date': json.get('execution_date'),
                 'Msg': 'task date out of the project start and end date'
             }
-            return response, 422
+            return jsonify(response), 422
     task = Task(**json)
     if task not in project.tasks:
         project.tasks.append(task)
         db.session.commit()
-    return task.as_dict(), 201
+    return jsonify(task.as_dict()), 201
 
 
 @api_views.route('/projects/<project_id>/tasks',
@@ -48,7 +48,7 @@ def get_tasks_from_project(project_id):
     project = Project.query.filter_by(id=project_id).first_or_404()
     project_dict = project.as_dict()
     project_dict['tasks'] = [task.as_dict() for task in project.tasks]
-    return project_dict, 200
+    return jsonify(project_dict), 200
 
 
 @api_views.route('/projects/<project_id>/tasks/<task_id>',
@@ -60,7 +60,7 @@ def fecth_task_from_project(project_id, task_id):
     '''
     project = Project.query.filter_by(id=project_id).first_or_404()
     task = Task.query.filter_by(id=task_id).first_or_404()
-    return task.as_dict(), 200
+    return jsonify(task.as_dict()), 200
 
 
 @api_views.route('/projects/<project_id>/tasks/<task_id>',
@@ -75,7 +75,7 @@ def delete_task_from_project(project_id, task_id):
     if task in project.tasks:
         project.tasks.remove(task)
         db.session.commit()
-    return {"Task deleted": task_id}, 200
+    return jsonify({"Task deleted": task_id}), 200
 
 
 @api_views.route('/projects/<project_id>/tasks/<task_id>',
@@ -101,10 +101,10 @@ def update_task_from_project(project_id, task_id):
                 'execution_date': json.get('execution_date'),
                 'Msg': 'task date out of the project start and end date'
             }
-            return response, 422
+            return jsonify(response), 422
         task.execution_date = json.get('execution_date')
         db.session.commit()
-    return task.as_dict()
+    return jsonify(task.as_dict())
 
 
 @api_views.route('/projects/<project_id>/tasks/<task_id>',
@@ -130,8 +130,7 @@ def modify_task_from_project(project_id, task_id):
                 'execution_date': json.get('execution_date'),
                 'Msg': 'task date out of the project start and end date'
             }
-            return response, 422
+            return jsonify(response), 422
         task.execution_date = json.get('execution_date')
         db.session.commit()
-    return task.as_dict()
-
+    return jsonify(task.as_dict())
