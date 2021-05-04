@@ -1,15 +1,15 @@
 # Project Manager REST API
 
-This API allows you to organize projects and their tasks. You can create, delete, update, get projects, all of this operations can also performed over theirs tasks. 
+This API allows you to organize projects and their tasks. You can create, delete, update, get projects, all of these operations can also performed over theirs tasks. 
 
-This API implements [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) (JSON WEB TOKEN) that's why you must be first registered and after logged in order to get a Token that allows you to do request to API.
+This API implements [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) (JSON WEB TOKEN) that's why you must be first register and tehn login order to get a Token that allows you to make requests to API.
 
 
 ## Installation
 
-In order to start using this API you must install `Python 3.8.5` and `MySQL 5.7`. (These were the versions used in develop).
+To start using this API you must install `Python 3.8.5` and `MySQL 5.7`. (These were the versions used in development).
 
-Now, follow this steps:
+Now, follow these steps:
 
 1. Choose a place in your computer and clone this repository. Type in your terminal:
 ```
@@ -28,11 +28,11 @@ $ pip install -r requirements.txt
 ```
 4. Configure the database.
 
-This API uses a MySQL database, the reason why you must configure one. For this it's included in this repository a file called `setup_db.sql` which will help you to do it easily. So in your terminal type:
+This API uses a MySQL database, the reason why you should configure one. For this it's included in this repository a file called `setup_db.sql` which will help you to do it easily. So in your terminal type:
 ```
 $ cat setup_db.sql | mysql -uroot -p
 ```
-Once you run the above command you must enter the passoword and wether all of it was OK the database should be created.
+Once you run the above command, type the passoword and wether all of it was OK the database should be created.
 > You can change database name, username and password, to do so, modify the `setup_db.sql` file before runnig the above command.
 
 5. Configure enviroment variables. The following variables will be used to run the API
@@ -48,7 +48,7 @@ SECRET_KEY ----> key used by Flask to proccess the incriptation.
 
 ## Usage
 
-After setup proccess above the API is ready to be executed. In order to do it you only to need to execute below command in your terminal:
+After setup proccess above the API is ready to be executed. To do so, you need only to execute below command in your terminal:
 ```
 $ API_HOST=0.0.0.0 API_PORT=5000 DB_USER=user_db DB_PWD=pwd_db DB_HOST=localhost DB_NAME=projects_db SECRET_KEY='gues me!' python -m api.v1.app
 ```
@@ -90,25 +90,25 @@ See the picture
 
 <a href="https://imgur.com/7yWbcfk"><img src="https://i.imgur.com/7yWbcfk.png" title="source: imgur.com" /></a>
 
-Once the information has been added you can make the post request, if everything was OK the response will be `Successfully registered.` and now you can login with this user to have access to other end point.
+Once the information has been added you can make the post request, if everything was OK the response will be `Successfully registered.` and now you can login with this user to have access to other endpoints.
 
-To loggin you must change the endpoint above to `http://127.0.0.1:5000/api/v1/users/login.` and send in the body the `username` and `password` of the user prevously registered.
+To login you must change the endpoint above to `http://127.0.0.1:5000/api/v1/users/login.` and send in the body the `username` and `password` of the user prevously registered.
 
-Like so:
+Like this:
 
 <a href="https://imgur.com/ag9gmia"><img src="https://i.imgur.com/ag9gmia.png" title="source: imgur.com" /></a>
 
 If it went well, the response will be a `token`. This token will be needed to make any another request.
 
-> This token has expiration time of 5 minutes, this means that you must login each 5 minutes to get other token and be able to interact with the API
+> This token has expiration time of 30 minutes, this means that you must login each 30 minutes to get another token and be able to interact with the API
 
 <a href="https://imgur.com/uaSpeMW"><img src="https://i.imgur.com/uaSpeMW.png" title="source: imgur.com" /></a>
 
-For example, you could make a get request to following endpoint to see all of the projects. For this you must placed in the header the token recieved at moment of loggin: Look at the picture:
+For example, you could make a `get` request to following endpoint to see all of the projects. For this you must put in the header the token recieved at time of login: Look at the picture:
 
 <a href="https://imgur.com/mx9L8Wb"><img src="https://i.imgur.com/mx9L8Wb.png" title="source: imgur.com" /></a>
 
-Every time you want to access to any end point you must performe the same proccess.
+Every time you want to access to any endpoint you must performe the same proccess.
 
 
 ## Support
